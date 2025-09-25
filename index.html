@@ -71,6 +71,7 @@
     let teamA = "", teamB = "";
     let runs = 0, wickets = 0, balls = 0, totalOvers = 0;
     let batting = "A"; // which team is batting
+    let firstInningsScore = 0, firstInningsDone = false;
 
     function startMatch() {
       teamA = document.getElementById("teamA").value || "Team A";
@@ -79,7 +80,7 @@
       batting = document.getElementById("battingFirst").value;
       
       document.getElementById("teams").innerText = 
-        (batting === "A" ? teamA : teamB) + " Batting";
+        (batting === "A" ? teamA : teamB) + " Batting (1st Innings)";
       
       document.getElementById("scoring").style.display = "block";
       updateScore();
@@ -103,10 +104,8 @@
     }
 
     function checkOverComplete() {
-      let oversDone = Math.floor(balls/6) + "." + (balls%6);
       if (Math.floor(balls/6) >= totalOvers) {
-        document.getElementById("scoreBoard").innerText = 
-          "Innings Over! Final Score: " + runs + "/" + wickets + " in " + totalOvers + " overs";
+        endInnings();
       } else {
         updateScore();
       }
@@ -116,6 +115,31 @@
       let oversDone = Math.floor(balls/6) + "." + (balls%6);
       document.getElementById("scoreBoard").innerText = 
         "Score: " + runs + "/" + wickets + " (" + oversDone + " overs of " + totalOvers + ")";
+    }
+
+    function endInnings() {
+      if (!firstInningsDone) {
+        firstInningsScore = runs;
+        firstInningsDone = true;
+        balls = 0;
+        runs = 0;
+        wickets = 0;
+        batting = (batting === "A") ? "B" : "A"; // switch batting team
+        document.getElementById("teams").innerText = 
+          (batting === "A" ? teamA : teamB) + " Batting (2nd Innings, Target: " + (firstInningsScore+1) + ")";
+        updateScore();
+      } else {
+        // Match result
+        let result = "";
+        if (runs > firstInningsScore) {
+          result = (batting === "A" ? teamA : teamB) + " WON by " + (10 - wickets) + " wickets!";
+        } else if (runs === firstInningsScore) {
+          result = "Match TIED!";
+        } else {
+          result = (batting === "A" ? teamB : teamA) + " WON by " + (firstInningsScore - runs) + " runs!";
+        }
+        document.getElementById("scoreBoard").innerText = result;
+      }
     }
   </script>
 </body>
