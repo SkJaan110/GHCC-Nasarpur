@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Local Cricket Scoring</title>
+  <title>Cricket Scoring</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -25,7 +25,7 @@
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
-    input, button {
+    input, button, select {
       padding: 10px;
       margin: 5px;
       font-size: 16px;
@@ -44,9 +44,15 @@
   <header>🏏 Local Cricket Scoring</header>
   
   <div class="container">
-    <h2>Create Team</h2>
+    <h2>Match Setup</h2>
     <input type="text" id="teamA" placeholder="Enter Team A Name">
-    <input type="text" id="teamB" placeholder="Enter Team B Name">
+    <input type="text" id="teamB" placeholder="Enter Team B Name"><br>
+    Overs: <input type="number" id="overs" placeholder="Enter Overs" min="1" value="5"><br>
+    Batting First: 
+    <select id="battingFirst">
+      <option value="A">Team A</option>
+      <option value="B">Team B</option>
+    </select><br>
     <button onclick="startMatch()">Start Match</button>
 
     <div id="scoring" style="display:none;">
@@ -63,34 +69,53 @@
 
   <script>
     let teamA = "", teamB = "";
-    let runs = 0, wickets = 0, balls = 0;
+    let runs = 0, wickets = 0, balls = 0, totalOvers = 0;
+    let batting = "A"; // which team is batting
 
     function startMatch() {
       teamA = document.getElementById("teamA").value || "Team A";
       teamB = document.getElementById("teamB").value || "Team B";
-      document.getElementById("teams").innerText = teamA + " vs " + teamB;
+      totalOvers = parseInt(document.getElementById("overs").value) || 5;
+      batting = document.getElementById("battingFirst").value;
+      
+      document.getElementById("teams").innerText = 
+        (batting === "A" ? teamA : teamB) + " Batting";
+      
       document.getElementById("scoring").style.display = "block";
+      updateScore();
     }
 
     function addRun(r) {
       runs += r;
-      updateScore();
+      balls++;
+      checkOverComplete();
     }
 
     function addWicket() {
       wickets++;
-      updateScore();
+      balls++;
+      checkOverComplete();
     }
 
     function nextBall() {
       balls++;
-      updateScore();
+      checkOverComplete();
+    }
+
+    function checkOverComplete() {
+      let oversDone = Math.floor(balls/6) + "." + (balls%6);
+      if (Math.floor(balls/6) >= totalOvers) {
+        document.getElementById("scoreBoard").innerText = 
+          "Innings Over! Final Score: " + runs + "/" + wickets + " in " + totalOvers + " overs";
+      } else {
+        updateScore();
+      }
     }
 
     function updateScore() {
-      let overs = Math.floor(balls/6) + "." + (balls%6);
+      let oversDone = Math.floor(balls/6) + "." + (balls%6);
       document.getElementById("scoreBoard").innerText = 
-        "Score: " + runs + "/" + wickets + " (" + overs + " overs)";
+        "Score: " + runs + "/" + wickets + " (" + oversDone + " overs of " + totalOvers + ")";
     }
   </script>
 </body>
