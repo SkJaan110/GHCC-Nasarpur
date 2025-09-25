@@ -1,127 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SKScoringCric</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="brand">
-      <div class="logo">SK</div>
-      <h1>SKScoringCric</h1>
-    </div>
-    <div class="sub">Local / Tournament scoring • No login (yet)</div>
+  <header>
+    <h1>🏏 SKScoringCric</h1>
+    <p>Welcome to Local Cricket Scoring</p>
   </header>
 
-  <main class="main">
-    <section class="panel" id="teamsPanel">
-      <h2>Teams & Players</h2>
-      <div class="row">
-        <div class="col">
-          <h3>Create / Add Player</h3>
-          <input id="playerName" placeholder="Player name" />
-          <select id="playerSide">
-            <option value="A">Team A</option>
-            <option value="B">Team B</option>
-          </select>
-          <button id="addPlayerBtn" class="btn primary">Add Player</button>
-          <p class="muted">Players saved in browser (localStorage). You can edit later.</p>
-        </div>
-        <div class="col">
-          <h3>Team A Players</h3>
-          <ul id="teamAList" class="player-list"></ul>
-        </div>
-        <div class="col">
-          <h3>Team B Players</h3>
-          <ul id="teamBList" class="player-list"></ul>
-        </div>
-      </div>
+  <main>
+    <section id="setup">
+      <h2>Start a New Match</h2>
+      <input type="text" id="teamA" placeholder="Team A Name">
+      <input type="text" id="teamB" placeholder="Team B Name">
+      <input type="number" id="overs" placeholder="No. of Overs">
+      <button id="startMatch">Start Match</button>
     </section>
 
-    <section class="panel" id="matchSetup">
-      <h2>Match Setup</h2>
-      <div class="row">
-        <div class="col">
-          <label>Overs per Innings</label>
-          <input id="oversInput" type="number" min="1" value="5" />
-          <label>Toss Winner</label>
-          <select id="tossWinner"><option value="A">Team A</option><option value="B">Team B</option></select>
-          <label>Choose to Bat</label>
-          <select id="batChoice"><option value="bat">Bat</option><option value="bowl">Bowl</option></select>
-          <button id="startMatchBtn" class="btn primary">Start Match</button>
-        </div>
-        <div class="col">
-          <h4>Current Match</h4>
-          <div id="currentMatchInfo" class="card muted">No active match</div>
-        </div>
+    <section id="scoring" style="display:none;">
+      <h2 id="scoreTitle"></h2>
+      <p id="score">Score: 0/0 (0.0)</p>
+      <div class="buttons">
+        <button onclick="addRun(0)">0</button>
+        <button onclick="addRun(1)">1</button>
+        <button onclick="addRun(2)">2</button>
+        <button onclick="addRun(3)">3</button>
+        <button onclick="addRun(4)">4</button>
+        <button onclick="addRun(6)">6</button>
+        <button onclick="addWicket()">W</button>
+        <button onclick="addExtra('WD')">WD</button>
+        <button onclick="addExtra('NB')">NB</button>
       </div>
-    </section>
-
-    <section class="panel" id="scoringPanel" style="display:none;">
-      <h2>Scoring Console</h2>
-      <div class="row">
-        <div class="col narrow">
-          <h3>Match</h3>
-          <div id="matchHeader" class="card"></div>
-
-          <h3>Players on Pitch</h3>
-          <label>On Strike</label>
-          <select id="onStrikeSelect"></select>
-          <label>Non Strike</label>
-          <select id="nonStrikeSelect"></select>
-          <label>Bowler</label>
-          <select id="bowlerSelect"></select>
-          <button id="setPlayersBtn" class="btn">Set Players</button>
-        </div>
-
-        <div class="col">
-          <div class="scorecard card">
-            <div class="score-top">
-              <div id="liveScore" class="big">0/0</div>
-              <div id="oversText" class="muted">0.0 overs</div>
-              <div id="targetText" class="muted"></div>
-            </div>
-            <div class="controls buttons">
-              <button class="btn run" data-run="1">1</button>
-              <button class="btn run" data-run="2">2</button>
-              <button class="btn run" data-run="3">3</button>
-              <button class="btn run" data-run="4">4</button>
-              <button class="btn run" data-run="6">6</button>
-              <button class="btn wicket">W</button>
-              <button class="btn extra" data-extra="nb">NB</button>
-              <button class="btn extra" data-extra="wd">WD</button>
-              <button class="btn ball">Next Ball</button>
-            </div>
-          </div>
-
-          <h3>Batting Scorecard</h3>
-          <table id="battingTable" class="score-table">
-            <thead><tr><th>Batsman</th><th>R</th><th>B</th><th>4s</th><th>6s</th></tr></thead>
-            <tbody></tbody>
-          </table>
-
-          <h3>Bowling Scorecard</h3>
-          <table id="bowlingTable" class="score-table">
-            <thead><tr><th>Bowler</th><th>O</th><th>R</th><th>W</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel" id="summaryPanel" style="display:none;">
-      <h2>Match Summary</h2>
-      <pre id="matchSummary" class="card"></pre>
-      <button id="newMatchBtn" class="btn secondary">New Match</button>
     </section>
   </main>
 
-  <footer class="site-footer">
-    Built for local tournaments • Export/backup in browser storage
-  </footer>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
