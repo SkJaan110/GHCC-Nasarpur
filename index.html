@@ -2,50 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>GULSHAN HAIDARI CRICKET CLUB NASARPUR</title>
+  <title>Local Cricket Scoring</title>
   <style>
-    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f7f7f7; }
-    header { background:#004080; color:white; text-align:center; padding:20px; }
-    header img { width:100px; border-radius:50%; }
-    .banner { background:url('banner.jpg') no-repeat center center; background-size:cover; height:200px; }
-    .container { padding:20px; max-width:900px; margin:auto; }
-    .player { border:1px solid #ddd; border-radius:8px; background:white; padding:15px; margin-bottom:15px; display:flex; align-items:center; }
-    .player img { width:100px; height:100px; border-radius:50%; margin-right:20px; object-fit:cover; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #006400;
+      color: white;
+      padding: 15px;
+      font-size: 22px;
+    }
+    .container {
+      margin: 20px auto;
+      padding: 20px;
+      max-width: 500px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+    }
+    #scoreBoard {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
+  <header>🏏 Local Cricket Scoring</header>
+  
+  <div class="container">
+    <h2>Create Team</h2>
+    <input type="text" id="teamA" placeholder="Enter Team A Name">
+    <input type="text" id="teamB" placeholder="Enter Team B Name">
+    <button onclick="startMatch()">Start Match</button>
 
-<header>
-  <img src="logo.png" alt="Club Logo">
-  <h1>GULSHAN HAIDARI CRICKET CLUB NASARPUR</h1>
-  <p>Welcome to our official cricket club website!</p>
-</header>
-
-<div class="banner"></div>
-
-<div class="container">
-  <h2>Players</h2>
-
-  <div class="player">
-    <img src="player1.jpg" alt="Player 1">
-    <div>
-      <h3>Ahmed Khan</h3>
-      <p>Right-hand Batsman | Right-arm Fast Bowler</p>
-      <p>Played in: Local League 2023, City League 2024</p>
-      <p>DOB: 10 Jan 2000</p>
+    <div id="scoring" style="display:none;">
+      <h2 id="teams"></h2>
+      <p id="scoreBoard">Score: 0/0 (0 overs)</p>
+      
+      <button onclick="addRun(1)">+1 Run</button>
+      <button onclick="addRun(4)">+4 Run</button>
+      <button onclick="addRun(6)">+6 Run</button>
+      <button onclick="addWicket()">Wicket</button>
+      <button onclick="nextBall()">Next Ball</button>
     </div>
   </div>
 
-  <div class="player">
-    <img src="player2.jpg" alt="Player 2">
-    <div>
-      <h3>Ali Raza</h3>
-      <p>Left-hand Batsman | Off-spin Bowler</p>
-      <p>Played in: Nasarpur Premier League</p>
-      <p>DOB: 22 Aug 1999</p>
-    </div>
-  </div>
-</div>
+  <script>
+    let teamA = "", teamB = "";
+    let runs = 0, wickets = 0, balls = 0;
 
+    function startMatch() {
+      teamA = document.getElementById("teamA").value || "Team A";
+      teamB = document.getElementById("teamB").value || "Team B";
+      document.getElementById("teams").innerText = teamA + " vs " + teamB;
+      document.getElementById("scoring").style.display = "block";
+    }
+
+    function addRun(r) {
+      runs += r;
+      updateScore();
+    }
+
+    function addWicket() {
+      wickets++;
+      updateScore();
+    }
+
+    function nextBall() {
+      balls++;
+      updateScore();
+    }
+
+    function updateScore() {
+      let overs = Math.floor(balls/6) + "." + (balls%6);
+      document.getElementById("scoreBoard").innerText = 
+        "Score: " + runs + "/" + wickets + " (" + overs + " overs)";
+    }
+  </script>
 </body>
 </html>
