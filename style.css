@@ -1,36 +1,47 @@
-/* style.css - SKScoringCric */
+/* style.css - SKScoringCric Advanced */
 :root{
-  --bg1:#141e30; --bg2:#243b55; --accent:#ff9800; --card:rgba(255,255,255,0.06);
+  --bg1:#0f1724; --bg2:#0b2545; --accent:#ffb020; --card:rgba(255,255,255,0.04);
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:Inter,Segoe UI,Arial;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#fff}
 .site-header{padding:18px 20px;background:rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{display:flex;align-items:center;gap:12px}
-.logo{width:52px;height:52px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:20px}
+.logo{width:56px;height:56px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:22px}
 .site-header h1{margin:0;color:#000;background:var(--accent);padding:6px 12px;border-radius:8px;font-size:20px}
 .sub{opacity:0.9}
-.main{max-width:1100px;margin:18px auto;padding:0 12px}
+.main{max-width:1200px;margin:18px auto;padding:0 12px}
 .panel{background:var(--card);padding:16px;margin-bottom:14px;border-radius:12px}
 .row{display:flex;gap:12px;flex-wrap:wrap}
-.col{flex:1;min-width:200px}
-.col.narrow{flex:0 0 260px}
+.col{flex:1;min-width:220px}
+.col.narrow{flex:0 0 280px}
 .input, input, select{width:100%;padding:8px;border-radius:8px;border:0;background:rgba(255,255,255,0.02);color:#fff;margin:6px 0}
-.btn{display:inline-block;padding:10px 12px;border-radius:8px;border:0;background:#2b2b2b;color:#fff;cursor:pointer;margin:6px 4px}
+.btn{display:inline-block;padding:10px 12px;border-radius:8px;border:0;background:#26313b;color:#fff;cursor:pointer;margin:6px 4px}
 .btn.primary{background:var(--accent);color:#000;font-weight:700}
 .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.12)}
 .player-list{list-style:none;padding:0;margin:6px 0}
-.player-list li{padding:6px;background:rgba(255,255,255,0.03);border-radius:6px;margin:6px 0;display:flex;justify-content:space-between;align-items:center}
-.card{background:rgba(255,255,255,0.03);padding:10px;border-radius:8px}
+.player-list li{padding:8px;background:rgba(255,255,255,0.02);border-radius:6px;margin:6px 0;display:flex;justify-content:space-between;align-items:center}
+.card{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px}
 .muted{opacity:0.85}
 .scorecard{display:flex;flex-direction:column;gap:10px;padding:12px}
 .score-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .big{font-size:28px;font-weight:800}
-.buttons{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.btn.run{background:#4caf50}
-.btn.extra{background:#ff9800;color:#000}
-.btn.wicket{background:#f44336}
-.btn.ball{background:#607d8b}
+.buttons{display:flex;flex-direction:column;gap:8px;align-items:center}
+.runs-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.extras-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.btn.run{background:#2ecc71}
+.btn.extra{background:#ffb020;color:#000}
+.btn.wicket{background:#e74c3c}
+.btn.ball{background:#6c757d}
 .score-table{width:100%;border-collapse:collapse;margin-top:8px}
-.score-table th, .score-table td{padding:8px;border:1px solid rgba(255,255,255,0.05);text-align:center}
+.score-table th, .score-table td{padding:8px;border:1px solid rgba(255,255,255,0.04);text-align:center}
+.score-table th{background:rgba(255,255,255,0.03)}
 .site-footer{text-align:center;padding:14px;color:rgba(255,255,255,0.6);opacity:0.95}
-@media(max-width:760px){.row{flex-direction:column}.col.narrow{flex:auto}}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{width:100%;max-width:520px}
+.modal .row{flex-direction:column}
+.modal select,input{width:100%}
+
+/* responsive */
+@media(max-width:900px){.row{flex-direction:column}.col.narrow{flex:auto}}
