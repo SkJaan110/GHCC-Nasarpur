@@ -145,16 +145,17 @@
   });
 
   // scoring buttons
-  document.querySelectorAll('.buttons .run').forEach(btn=>{
-    btn.addEventListener('click', ()=> handleRun(parseInt(btn.dataset.run)));
-  });
-  document.querySelector('.buttons .wicket').addEventListener('click', handleWicket);
-  document.querySelectorAll('.buttons .extra').forEach(btn=>{
-    btn.addEventListener('click', ()=> handleExtra(btn.dataset.extra));
-  });
-  document.querySelector('.buttons .ball').addEventListener('click', handleDot);
-
-  // scoring handlers
+  document.getElementById("run0").addEventListener("click", () => addRun(0));
+  document.getElementById("run1").addEventListener("click", () => addRun(1)); 
+  document.getElementById("run2").addEventListener("click", () => addRun(2));
+  document.getElementById("run3").addEventListener("click", () => addRun(3));
+  document.getElementById("run4").addEventListener("click", () => addRun(4));
+  document.getElementById("run6").addEventListener("click", () => addRun(6));
+  document.getElementById("wicket").addEventListener("click", () => addwicket(W));
+  document.getElementById("nb").addEventListener("click", () => addextra(NB));
+  document.getElementById("extra").addEventListener("click", () => addwide(WD));
+  document.getElementById("ball").addEventListener("click", () => addball(Next Ball));
+  
   function handleRun(r){
     if(!match || match.finished) return;
     // add runs
