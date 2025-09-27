@@ -125,6 +125,24 @@
     <br>
     <button class="wicket-btn">Wicket</button>
   </div>
+<!-- Teams Section -->
+<div class="teams-container">
+  <h2>Teams</h2>
+  
+  <div class="team">
+    <button class="team-toggle" onclick="toggleSquad('teamA')">Team A (0 Players)</button>
+    <div id="teamA" class="squad hidden"></div>
+    <input type="text" id="playerA" placeholder="Add player to Team A">
+    <button onclick="addPlayer('A')">Add Player</button>
+  </div>
+
+  <div class="team">
+    <button class="team-toggle" onclick="toggleSquad('teamB')">Team B (0 Players)</button>
+    <div id="teamB" class="squad hidden"></div>
+    <input type="text" id="playerB" placeholder="Add player to Team B">
+    <button onclick="addPlayer('B')">Add Player</button>
+  </div>
+</div>
 
   <div class="animations">
     <button class="freehit">FREE HIT</button>
