@@ -3,40 +3,32 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SKScoringCric - Advanced</title>
+  <title>SKScoringCric - Pro</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="site-header">
     <div class="brand">
       <div class="logo">SK</div>
-      <h1>SKScoringCric</h1>
+      <h1>SKScoringCric Pro</h1>
     </div>
-    <div class="sub">Advanced Local / Tournament Scoring • No login (yet)</div>
+    <div class="sub">Professional local scoring • No login (yet)</div>
   </header>
 
   <main class="main">
     <section class="panel" id="teamsPanel">
-      <h2>Teams & Players</h2>
+      <h2>Teams</h2>
       <div class="row">
         <div class="col">
-          <h3>Add Player</h3>
+          <button class="team-btn" id="teamAbtn">Team A (<span id="teamACount">0</span>)</button>
+          <button class="team-btn" id="teamBbtn">Team B (<span id="teamBCount">0</span>)</button>
+          <div class="small muted">Tap team to view squad / manage players</div>
+        </div>
+        <div class="col">
+          <h3>Add Player to Squad</h3>
           <input id="playerName" placeholder="Player name" />
-          <select id="playerSide">
-            <option value="A">Team A</option>
-            <option value="B">Team B</option>
-          </select>
+          <select id="playerSide"><option value="A">Team A</option><option value="B">Team B</option></select>
           <button id="addPlayerBtn" class="btn primary">Add Player</button>
-          <p class="muted">Players saved in browser (localStorage). You can edit later.</p>
-          <p><small>Tip: add at least 6 players per team for proper play.</small></p>
-        </div>
-        <div class="col">
-          <h3>Team A Players</h3>
-          <ul id="teamAList" class="player-list"></ul>
-        </div>
-        <div class="col">
-          <h3>Team B Players</h3>
-          <ul id="teamBList" class="player-list"></ul>
         </div>
       </div>
     </section>
@@ -47,9 +39,9 @@
         <div class="col">
           <label>Overs per Innings</label>
           <input id="oversInput" type="number" min="1" value="5" />
-          <label>Toss Winner</label>
+          <label>Toss Winner (default)</label>
           <select id="tossWinner"><option value="A">Team A</option><option value="B">Team B</option></select>
-          <label>Choose to Bat</label>
+          <label>Choose to (default)</label>
           <select id="batChoice"><option value="bat">Bat</option><option value="bowl">Bowl</option></select>
           <button id="startMatchBtn" class="btn primary">Start Match</button>
         </div>
@@ -57,8 +49,8 @@
           <h4>Current Match</h4>
           <div id="currentMatchInfo" class="card muted">No active match</div>
           <div style="margin-top:10px;">
-            <button id="exportBtn" class="btn">Export Match JSON</button>
-            <button id="importBtn" class="btn">Import Match JSON</button>
+            <button id="exportBtn" class="btn">Export JSON</button>
+            <button id="importBtn" class="btn">Import JSON</button>
             <input id="importFile" type="file" style="display:none" accept="application/json"/>
           </div>
         </div>
@@ -66,61 +58,69 @@
     </section>
 
     <section class="panel" id="scoringPanel" style="display:none;">
-      <h2>Scoring Console</h2>
-      <div class="row">
-        <div class="col narrow">
-          <h3>Match</h3>
-          <div id="matchHeader" class="card"></div>
-
-          <h3>Players on Pitch</h3>
-          <label>On Strike</label>
-          <select id="onStrikeSelect"></select>
-          <label>Non Strike</label>
-          <select id="nonStrikeSelect"></select>
-          <label>Bowler</label>
-          <select id="bowlerSelect"></select>
-          <button id="setPlayersBtn" class="btn">Set Players</button>
-        </div>
-
-        <div class="col">
-          <div class="scorecard card">
-            <div class="score-top">
-              <div>
-                <div id="liveScore" class="big">0/0</div>
-                <div id="oversText" class="muted">0.0 overs</div>
-                <div id="targetText" class="muted"></div>
-              </div>
-            </div>
-
-            <div class="controls buttons">
-              <div class="runs-row">
-                <button class="btn run" data-run="0">0</button>
-                <button class="btn run" data-run="1">1</button>
-                <button class="btn run" data-run="2">2</button>
-                <button class="btn run" data-run="3">3</button>
-                <button class="btn run" data-run="4">4</button>
-                <button class="btn run" data-run="6">6</button>
-              </div>
-              <div class="extras-row">
-                <button class="btn wicket">Wicket</button>
-                <button class="btn extra" data-extra="nb">No Ball</button>
-                <button class="btn extra" data-extra="wd">Wide</button>
-                <button class="btn ball">Next Ball (dot)</button>
-              </div>
-            </div>
+      <div class="top-row">
+        <div class="left">
+          <div id="tossInfo" class="muted small">Toss: -</div>
+          <div id="matchHeadline" class="headline">No match</div>
+          <div id="liveSummary" class="live-summary">
+            <div id="teamShort" class="team-short">GH</div>
+            <div id="liveScore" class="big">0/0</div>
+            <div id="oversText" class="muted">0.0</div>
+            <div id="targetText" class="muted"></div>
           </div>
+          <div id="needText" class="muted small"></div>
+        </div>
+        <div class="right">
+          <div class="players-mini">
+            <div><b>On Strike</b><div id="strikeRow"><span id="strikeName">-</span> <button id="swapStrikeBtn" class="small-btn" title="Swap strike">®</button></div></div>
+            <div><b>Non Strike</b><div id="nonstrikeName">-</div></div>
+            <div><b>Bowler</b><div id="bowlerName">-</div></div>
+          </div>
+          <div class="recent-balls" id="recentBalls"></div>
+        </div>
+      </div>
 
-          <h3>Batting Scorecard</h3>
-          <table id="battingTable" class="score-table">
-            <thead><tr><th>Batsman</th><th>R</th><th>B</th><th>4s</th><th>6s</th></tr></thead>
-            <tbody></tbody>
-          </table>
+      <div class="controls-row">
+        <div class="runs-grid">
+          <button class="btn big run" data-run="0">0</button>
+          <button class="btn big run" data-run="1">1</button>
+          <button class="btn big run" data-run="2">2</button>
+          <button class="btn big run" data-run="3">3</button>
+          <button class="btn big run" data-run="4">4</button>
+          <button class="btn big run" data-run="6">6</button>
+        </div>
+        <div class="extras-grid">
+          <button class="btn big wicket">Wicket</button>
+          <button class="btn big extra" data-extra="nb">No Ball</button>
+          <button class="btn big extra" data-extra="wd">Wide</button>
+          <button class="btn big undo">Undo</button>
+        </div>
+      </div>
 
-          <h3>Bowling Scorecard</h3>
-          <table id="bowlingTable" class="score-table">
-            <thead><tr><th>Bowler</th><th>O</th><th>R</th><th>W</th></tr></thead>
-            <tbody></tbody>
+      <div class="tab-row">
+        <button class="tab-btn active" data-tab="scorecard">Scorecard</button>
+        <button class="tab-btn" data-tab="bowling">Bowling</button>
+        <button class="tab-btn" data-tab="info">Info</button>
+        <button class="tab-btn" data-tab="commentary">Commentary</button>
+      </div>
+
+      <div class="tab-content" id="tabContent">
+        <div id="scorecardTab" class="tab active">
+          <table class="score-line"><tr><th>Team</th><th>Score</th><th>Batsman</th><th>R</th><th>B</th><th>Bowler</th><th>R/W</th><th>O</th></tr>
+            <tr><td id="shortTeam">GH</td><td id="scoreLine">0/0</td><td id="batLine">*</td><td id="batR">0</td><td id="batB">0</td><td id="bowLine">-</td><td id="bowRW">0/0</td><td id="bowO">0.0</td></tr>
           </table>
+        </div>
+        <div id="bowlingTab" class="tab" style="display:none">
+          <h4>Bowling Figures</h4>
+          <table id="bowlingTable" class="score-table"><thead><tr><th>Bowler</th><th>O</th><th>R</th><th>W</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div id="infoTab" class="tab" style="display:none">
+          <h4>Match Info</h4>
+          <div id="infoBox" class="card muted">No info</div>
+        </div>
+        <div id="commTab" class="tab" style="display:none">
+          <h4>Commentary</h4>
+          <div id="commBox" class="card muted">Ball by ball commentary will appear here.</div>
         </div>
       </div>
     </section>
@@ -132,13 +132,13 @@
     </section>
   </main>
 
-  <!-- Modals -->
+  <!-- Modal -->
   <div id="modalOverlay" class="modal-overlay" style="display:none">
     <div class="modal card" id="modalContent"></div>
   </div>
 
   <footer class="site-footer">
-    Built for local tournaments • Export/backup in browser storage
+    SKScoringCric Pro — Local tournament scoring
   </footer>
 
 <script src="script.js"></script>
