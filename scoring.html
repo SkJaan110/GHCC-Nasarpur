@@ -1,0 +1,82 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Scoring</title><link rel="stylesheet" href="style.css"></head><body>
+<header><div class="brand"><div class="logo">SK</div><h1>SKScoringCric - Scoring</h1></div></header>
+<main class="card">
+  <div style="margin-bottom:8px"><button class="btn" onclick="history.back()">Back</button> <button class="btn" id="exportBtn">Export Data</button></div>
+  <div id="scoringArea">
+    <div class="row score-top">
+      <div class="left col">
+        <div id="tossInfo" class="muted small">Toss: -</div>
+        <div id="matchHeadline" class="headline">No match selected</div>
+        <div class="live-summary">
+          <div class="team-short" id="teamShort">--</div>
+          <div class="big" id="liveScore">0/0</div>
+          <div class="muted" id="oversText">0.0</div>
+          <div class="muted" id="targetText"></div>
+        </div>
+        <div class="muted small" id="needText"></div>
+      </div>
+      <div class="right col" style="flex:0 0 300px">
+        <div class="players-mini">
+          <div><b>On Strike</b><div id="strikeName">-</div></div>
+          <div><b>Non Strike</b><div id="nonStrikeName">-</div></div>
+          <div><b>Bowler</b><div id="bowlerName">-</div></div>
+        </div>
+        <div style="margin-top:8px"><b>Recent</b></div>
+        <div class="recent-balls" id="recentBalls"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="runs">
+        <button data-run="0" class="runBtn">0</button>
+        <button data-run="1" class="runBtn">1</button>
+        <button data-run="2" class="runBtn">2</button>
+        <button data-run="3" class="runBtn">3</button>
+        <button data-run="4" class="runBtn">4</button>
+        <button data-run="6" class="runBtn">6</button>
+      </div>
+      <div class="extras">
+        <button data-extra="wd" class="extraBtn">Wide</button>
+        <button data-extra="nb" class="extraBtn">No Ball</button>
+        <button data-extra="bye" class="extraBtn">Bye</button>
+        <button data-extra="lbye" class="extraBtn">Leg Bye</button>
+        <button id="undoBtn" class="btn">Undo</button>
+      </div>
+      <div style="margin-top:8px">
+        <button id="wicketBtn" class="wicket-btn">Wicket</button>
+        <button id="changeBowlerBtn" class="btn">Change Bowler</button>
+      </div>
+    </div>
+
+    <div class="tab-row">
+      <button data-tab="scorecard" class="tab active">Scorecard</button>
+      <button data-tab="bowling" class="tab">Bowling</button>
+      <button data-tab="info" class="tab">Info</button>
+      <button data-tab="commentary" class="tab">Commentary</button>
+    </div>
+
+    <div id="tabContent">
+      <div id="scorecard" class="card" style="margin-top:12px">
+        <table class="score-line">
+          <thead><tr><th>Team</th><th>Score</th><th>Batsman</th><th>R</th><th>B</th><th>Bowler</th><th>R/W</th><th>O</th></tr></thead>
+          <tbody>
+            <tr>
+              <td id="shortTeam">--</td><td id="scoreLine">0/0</td><td id="batLine">-</td><td id="batR">0</td><td id="batB">0</td><td id="bowLine">-</td><td id="bowRW">0/0</td><td id="bowO">0.0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="bowling" class="card" style="margin-top:12px;display:none">
+        <h4>Bowling Figures</h4>
+        <table id="bowlingTable" class="score-table"><thead><tr><th>Bowler</th><th>O</th><th>R</th><th>W</th></tr></thead><tbody></tbody></table>
+      </div>
+      <div id="info" class="card" style="margin-top:12px;display:none"><h4>Match Info</h4><div id="infoBox" class="muted">No info</div></div>
+      <div id="commentary" class="card" style="margin-top:12px;display:none"><h4>Commentary</h4><pre id="commBox" class="muted" style="white-space:pre-wrap"></pre></div>
+    </div>
+
+  </div>
+</main>
+
+<div id="modalOverlay" class="modal-overlay"><div class="modal" id="modalContent"></div></div>
+
+<script src="script.js"></script></body></html>
