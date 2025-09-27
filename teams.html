@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Teams</title><link rel="stylesheet" href="style.css"></head><body>
+<header><div class="brand"><div class="logo">SK</div><h1>SKScoringCric</h1></div></header>
+<main class="card">
+  <div><button class="btn" onclick="history.back()">Back</button></div>
+  <h2 id="tname">Teams</h2>
+  <div id="teamsWrap"></div>
+</main>
+<div id="modalOverlay" class="modal-overlay"><div class="modal" id="modalContent"></div></div>
+<script src="script.js"></script>
+<script>
+(function(){
+  const tid = q('tid'); if(!tid) return location.href='index.html'; const t = getTournamentById(tid); document.getElementById('tname').innerText = t.name;
+  const wrap = document.getElementById('teamsWrap');
+  function render(){ wrap.innerHTML=''; t.teams.forEach(team=>{ const div=document.createElement('div'); div.className='card'; div.innerHTML=`<div class='row'><div class='col'><strong>${team.name} (${team.short})</strong><div class='muted'>${team.players.length} players</div></div><div style='flex:0 0 180px'><button class='btn' onclick="openPlayers('${team.id}')">Manage Players</button> <button class='btn' onclick="if(confirm('Delete team?')){ const data=loadData(); const tt=data.tournaments.find(x=>x.id==='${tid}'); tt.teams=tt.teams.filter(x=>x.id!=='${team.id}'); saveData(data); location.reload(); }">Delete</button></div></div>`; wrap.appendChild(div); }); }
+  window.openPlayers = function(teamId){
+    const team = getTeamById(tid, teamId);
+    showModal(`<h3>Team: ${team.name}</h3><div id="playerBox">${team.players.map(p=>`<div style="padding:6px;background:rgba(255,255,255,0.02);margin:6px 0;border-radius:6px;">${p.name} <button onclick="editPlayer('${teamId}','${p.id}')">Edit</button> <button onclick="deletePlayer('${teamId}','${p.id}')">Delete</button></div>`).join('')}</div><div style="margin-top:8px"><input id="newPlayerName" placeholder="Player name"/><select id="newPlayerRole"><option value="batsman">Batsman</option><option value="bowler">Bowler</option><option value="allrounder">All-rounder</option><option value="wk">Wicket-keeper</option></select><div style="margin-top:8px"><button id="addP" class="btn primary">Add</button> <button id="closeM" class="btn">Close</button></div></div>`);
+    document.getElementById('closeM').addEventListener('click', hideModal);
+    document.getElementById('addP').addEventListener('click', ()=>{
+      const name = document.getElementById('newPlayerName').value.trim(); const role = document.getElementById('newPlayerRole').value;
+      if(!name) return alert('Enter name'); const data = loadData(); const tt = data.tournaments.find(x=>x.id===tid); const team = tt.teams.find(x=>x.id===teamId); team.players.push({id:newid('p'), name, role}); saveData(data); hideModal(); render();
+    });
+  };
+  window.editPlayer = function(teamId, pid){ const newn = prompt('Edit player name'); if(!newn) return; const data = loadData(); const tt = data.tournaments.find(x=>x.id===tid); const team = tt.teams.find(x=>x.id===teamId); const p = team.players.find(x=>x.id===pid); p.name=newn; saveData(data); render(); };
+  window.deletePlayer = function(teamId, pid){ if(!confirm('Delete?')) return; const data=loadData(); const tt=data.tournaments.find(x=>x.id===tid); const team = tt.teams.find(x=>x.id===teamId); team.players = team.players.filter(x=>x.id!==pid); saveData(data); render(); };
+  render();
+})();</script></body></html>
