@@ -1,146 +1,137 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SKScoringCric - Pro</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SKScoringCric</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f2f2f2;
+      text-align: center;
+    }
+    header {
+      background: #fff;
+      padding: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      border-bottom: 2px solid #ddd;
+    }
+    .toss-banner {
+      background: purple;
+      color: #fff;
+      padding: 8px;
+      font-weight: bold;
+    }
+    .score-area {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 15px;
+    }
+    .batsman, .bowler, .score-box {
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      color: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      flex: 1;
+      margin: 5px;
+    }
+    .controller {
+      background: linear-gradient(45deg, #74ebd5, #ACB6E5);
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px;
+    }
+    .controller button {
+      padding: 10px;
+      margin: 5px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .runs button { background: #fff; }
+    .extras button { background: #ffeb3b; }
+    .wicket-btn { background: #f44336; color: #fff; }
+    .animations {
+      margin: 20px;
+      padding: 10px;
+      background: black;
+      color: white;
+      border-radius: 10px;
+    }
+    .animations button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .freehit { background: lime; }
+    .four { background: deeppink; }
+    .six { background: dodgerblue; }
+    .wicket { background: red; }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="brand">
-      <div class="logo">SK</div>
-      <h1>SKScoringCric Pro</h1>
-    </div>
-    <div class="sub">Professional local scoring • No login (yet)</div>
+
+  <header>
+    Match Scoreboard <br>
+    <small>SULTAN 🐯 TIGER vs RISING ☀️ STARS</small>
   </header>
 
-  <main class="main">
-    <section class="panel" id="teamsPanel">
-      <h2>Teams</h2>
-      <div class="row">
-        <div class="col">
-          <button class="team-btn" id="teamAbtn">Team A (<span id="teamACount">0</span>)</button>
-          <button class="team-btn" id="teamBbtn">Team B (<span id="teamBCount">0</span>)</button>
-          <div class="small muted">Tap team to view squad / manage players</div>
-        </div>
-        <div class="col">
-          <h3>Add Player to Squad</h3>
-          <input id="playerName" placeholder="Player name" />
-          <select id="playerSide"><option value="A">Team A</option><option value="B">Team B</option></select>
-          <button id="addPlayerBtn" class="btn primary">Add Player</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel" id="matchSetup">
-      <h2>Match Setup</h2>
-      <div class="row">
-        <div class="col">
-          <label>Overs per Innings</label>
-          <input id="oversInput" type="number" min="1" value="5" />
-          <label>Toss Winner (default)</label>
-          <select id="tossWinner"><option value="A">Team A</option><option value="B">Team B</option></select>
-          <label>Choose to (default)</label>
-          <select id="batChoice"><option value="bat">Bat</option><option value="bowl">Bowl</option></select>
-          <button id="startMatchBtn" class="btn primary">Start Match</button>
-        </div>
-        <div class="col">
-          <h4>Current Match</h4>
-          <div id="currentMatchInfo" class="card muted">No active match</div>
-          <div style="margin-top:10px;">
-            <button id="exportBtn" class="btn">Export JSON</button>
-            <button id="importBtn" class="btn">Import JSON</button>
-            <input id="importFile" type="file" style="display:none" accept="application/json"/>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel" id="scoringPanel" style="display:none;">
-      <div class="top-row">
-        <div class="left">
-          <div id="tossInfo" class="muted small">Toss: -</div>
-          <div id="matchHeadline" class="headline">No match</div>
-          <div id="liveSummary" class="live-summary">
-            <div id="teamShort" class="team-short">GH</div>
-            <div id="liveScore" class="big">0/0</div>
-            <div id="oversText" class="muted">0.0</div>
-            <div id="targetText" class="muted"></div>
-          </div>
-          <div id="needText" class="muted small"></div>
-        </div>
-        <div class="right">
-          <div class="players-mini">
-            <div><b>On Strike</b><div id="strikeRow"><span id="strikeName">-</span> <button id="swapStrikeBtn" class="small-btn" title="Swap strike">®</button></div></div>
-            <div><b>Non Strike</b><div id="nonstrikeName">-</div></div>
-            <div><b>Bowler</b><div id="bowlerName">-</div></div>
-          </div>
-          <div class="recent-balls" id="recentBalls"></div>
-        </div>
-      </div>
-
-      <div class="controls-row">
-        <div class="runs-grid">
-          <button class="btn big run" data-run="0">0</button>
-          <button class="btn big run" data-run="1">1</button>
-          <button class="btn big run" data-run="2">2</button>
-          <button class="btn big run" data-run="3">3</button>
-          <button class="btn big run" data-run="4">4</button>
-          <button class="btn big run" data-run="6">6</button>
-        </div>
-        <div class="extras-grid">
-          <button class="btn big wicket">Wicket</button>
-          <button class="btn big extra" data-extra="nb">No Ball</button>
-          <button class="btn big extra" data-extra="wd">Wide</button>
-          <button class="btn big undo">Undo</button>
-        </div>
-      </div>
-
-      <div class="tab-row">
-        <button class="tab-btn active" data-tab="scorecard">Scorecard</button>
-        <button class="tab-btn" data-tab="bowling">Bowling</button>
-        <button class="tab-btn" data-tab="info">Info</button>
-        <button class="tab-btn" data-tab="commentary">Commentary</button>
-      </div>
-
-      <div class="tab-content" id="tabContent">
-        <div id="scorecardTab" class="tab active">
-          <table class="score-line"><tr><th>Team</th><th>Score</th><th>Batsman</th><th>R</th><th>B</th><th>Bowler</th><th>R/W</th><th>O</th></tr>
-            <tr><td id="shortTeam">GH</td><td id="scoreLine">0/0</td><td id="batLine">*</td><td id="batR">0</td><td id="batB">0</td><td id="bowLine">-</td><td id="bowRW">0/0</td><td id="bowO">0.0</td></tr>
-          </table>
-        </div>
-        <div id="bowlingTab" class="tab" style="display:none">
-          <h4>Bowling Figures</h4>
-          <table id="bowlingTable" class="score-table"><thead><tr><th>Bowler</th><th>O</th><th>R</th><th>W</th></tr></thead><tbody></tbody></table>
-        </div>
-        <div id="infoTab" class="tab" style="display:none">
-          <h4>Match Info</h4>
-          <div id="infoBox" class="card muted">No info</div>
-        </div>
-        <div id="commTab" class="tab" style="display:none">
-          <h4>Commentary</h4>
-          <div id="commBox" class="card muted">Ball by ball commentary will appear here.</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel" id="summaryPanel" style="display:none;">
-      <h2>Match Summary</h2>
-      <pre id="matchSummary" class="card"></pre>
-      <button id="newMatchBtn" class="btn secondary">New Match</button>
-    </section>
-  </main>
-
-  <!-- Modal -->
-  <div id="modalOverlay" class="modal-overlay" style="display:none">
-    <div class="modal card" id="modalContent"></div>
+  <div class="toss-banner">
+    RISING ☀️ STARS WON THE TOSS AND OPTED TO BAT
   </div>
 
-  <footer class="site-footer">
-    SKScoringCric Pro — Local tournament scoring
-  </footer>
+  <div class="score-area">
+    <div class="batsman">
+      ▶️ IMRAN ALI – 0 (0) <br>
+      DILDAR – 0 (0)
+    </div>
+    <div class="score-box">
+      0 – 0 <br> 0/6 OVR
+    </div>
+    <div class="bowler">
+      SHAHZAD <br> 0-0 (0)
+    </div>
+  </div>
 
-<script src="script.js"></script>
+  <div class="controller">
+    <h2>Controller</h2>
+    <button>Swap Batter</button>
+    <button>Retire Batter</button>
+    <button>Change Bowler</button>
+    <button>Undo</button>
+    <br><br>
+    <div class="runs">
+      <button>0</button>
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>4</button>
+      <button>6</button>
+    </div>
+    <br>
+    <div class="extras">
+      <button>Wide</button>
+      <button>No Ball</button>
+      <button>Bye</button>
+      <button>Leg Bye</button>
+    </div>
+    <br>
+    <button class="wicket-btn">Wicket</button>
+  </div>
+
+  <div class="animations">
+    <button class="freehit">FREE HIT</button>
+    <button class="four">FOUR</button>
+    <button class="six">SIX</button>
+    <button class="wicket">WICKET</button>
+  </div>
+
 </body>
 </html>
