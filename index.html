@@ -1,20 +1,41 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>SKScoring - Home</title><link rel="stylesheet" href="style.css"></head><body>
-<header><div class="brand"><div class="logo">SK</div><h1>SKScoringCric</h1></div></header>
-<main class="card">
-  <h2>Create Tournament</h2>
-  <input id="tName" placeholder="Tournament name (e.g. GHCC Nasarpur)"/><br/>
-  <button class="btn primary" id="createT">Create Tournament</button>
-  <hr/>
-  <h3>Existing Tournaments</h3>
-  <div id="list"></div>
-  <hr/>
-  <div><button class="btn" onclick="location.href='scoring.html'">Open Scoring (debug)</button> <button class="btn" onclick="exportData()">Export</button> <input type="file" accept="application/json" onchange="importFile(this)"></div>
-</main>
-<script src="script.js"></script>
-<script>
-(function(){
-  const list = document.getElementById('list');
-  function render(){ const data = loadData(); list.innerHTML=''; data.tournaments.forEach(t=>{ const div=document.createElement('div'); div.className='list-item'; div.innerHTML=`<div><strong>${t.name}</strong><div class="muted small">${t.teams.length} teams • ${t.matches.length} matches</div></div><div><button class="btn" onclick="location.href='tournament.html?tid=${t.id}'">Open</button> <button class="btn" onclick="if(confirm('Delete?')){ const d=loadData(); d.tournaments=d.tournaments.filter(x=>x.id!=='${t.id}'); saveData(d); render(); }">Delete</button></div>`; list.appendChild(div); }); }
-  document.getElementById('createT').addEventListener('click', ()=>{ const name=document.getElementById('tName').value.trim(); if(!name) return alert('Enter name'); const d=loadData(); const t={id:newid('t'), name, teams:[], matches:[]}; d.tournaments.push(t); saveData(d); document.getElementById('tName').value=''; render(); });
-  render();
-})();</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK Scoring Cric</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+  <script src="firebase-config.js"></script>
+</head>
+<body>
+  <header>
+    <h1 class="logo">🏏 SK Scoring Cric</h1>
+    <p class="tagline">
+      Yeh cricket scoring website hai, yahan per aap apne cricket ki scoring kar sakte hain free mein.<br>
+      Jaldi hi live streaming overlays bhi add kiye jaenge!
+    </p>
+  </header>
+
+  <main>
+    <div class="auth-container">
+      <h2>Login / Signup</h2>
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Password">
+      <button onclick="signUp()">Sign Up</button>
+      <button onclick="signIn()">Login</button>
+      <hr>
+      <button class="google-btn" onclick="googleLogin()">Login with Google</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>⚡ Built for local & tournament scoring • SK Scoring Cric © 2025</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
