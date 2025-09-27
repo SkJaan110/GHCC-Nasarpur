@@ -1,0 +1,31 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Matches</title><link rel="stylesheet" href="style.css"></head><body>
+<header><div class="brand"><div class="logo">SK</div><h1>SKScoringCric</h1></div></header>
+<main class="card">
+  <div><button class="btn" onclick="history.back()">Back</button></div>
+  <h2>Create Match</h2>
+  <div class="row">
+    <div class="col">
+      <label>Selected Tournament</label>
+      <div id="tname"></div>
+      <label>Team A</label><select id="teamA"></select>
+      <label>Team B</label><select id="teamB"></select>
+      <label>Overs per innings</label><input id="overs" type="number" min="1" value="5"/>
+      <button class="btn primary" id="createMatch">Create Match</button>
+    </div>
+    <div class="col">
+      <h4>Scheduled Matches</h4>
+      <div id="matchesList"></div>
+    </div>
+  </div>
+</main>
+<script src="script.js"></script>
+<script>
+(function(){
+  const tid = q('tid'); if(!tid) return location.href='index.html'; const t = getTournamentById(tid); document.getElementById('tname').innerText = t.name;
+  const teamA = document.getElementById('teamA'); const teamB = document.getElementById('teamB');
+  function populate(){ teamA.innerHTML = t.teams.map(x=>`<option value="${x.id}">${x.name}</option>`).join(''); teamB.innerHTML = t.teams.map(x=>`<option value="${x.id}">${x.name}</option>`).join(''); renderList(); }
+  document.getElementById('createMatch').addEventListener('click', ()=>{ const a=teamA.value,b=teamB.value; if(a===b) return alert('Choose different teams'); const overs=parseInt(document.getElementById('overs').value)||5; const data=loadData(); const tt=data.tournaments.find(x=>x.id===tid); tt.matches.push({id:newid('m'), teamA:a, teamB:b, overs, date:new Date().toISOString(), status:'scheduled', runtime:null}); saveData(data); populate(); });
+  function renderList(){ const wraps = document.getElementById('matchesList'); wraps.innerHTML=''; t.matches.forEach(m=>{ const ta = t.teams.find(x=>x.id===m.teamA); const tb = t.teams.find(x=>x.id===m.teamB); const div=document.createElement('div'); div.className='list-item'; div.innerHTML=`<div><strong>${ta.name} vs ${tb.name}</strong><div class='muted small'>${m.overs} overs • ${m.status}</div></div><div><button class='btn' onclick="startMatch('${tid}','${m.id}')">Start</button> <button class='btn' onclick="location.href='scoring.html?tid=${tid}&mid=${m.id}'">Open</button></div>`; wraps.appendChild(div); }); }
+  window.startMatch = function(tidLocal, mid){ const tt = loadData().tournaments.find(x=>x.id===tidLocal); const mm = tt.matches.find(x=>x.id===mid); location.href = 'scoring.html?tid='+tidLocal+'&mid='+mid+'&start=1'; };
+  populate();
+})();</script></body></html>
